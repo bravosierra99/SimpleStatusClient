@@ -38,7 +38,7 @@ statuses = {
     }
 }
 
-client = api.APIClient("http://127.0.0.1:8001")
+client = api.APIClient("http://127.0.0.1:8001/api")
 
 for key, config in configs.items():
     response = client.set_config_base(key, **config)
