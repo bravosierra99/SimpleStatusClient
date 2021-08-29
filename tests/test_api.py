@@ -17,7 +17,7 @@ configs = {
     }
 }
 
-statuses = {
+statuses_base = {
     1: {
         "message": "one is great",
         "color": Colors.green
@@ -27,13 +27,36 @@ statuses = {
         "color": Colors.yellow
     }
 }
+statuses = {
+    "component one": {
+        "message": "one is great",
+        "color": Colors.green
+    },
+    "component two": {
+        "message": "two is eh",
+        "color": Colors.yellow
+    }
+}
 
 client = api.APIClient("http://127.0.0.1:8001")
 
 for key, config in configs.items():
-    response = client.set_config(key,**config)
+    response = client.set_config_base(key, **config)
     print(response.content)
 
-for key, status in statuses.items():
-    response = client.set_status(key,**status)
+for key, status in statuses_base.items():
+    response = client.set_status_base(key, **status)
+    print(response.content)
+
+for _, config in configs.items():
+    try:
+        config.pop("parent_key")
+    except:
+        pass
+    response = client.set_config(**(config))
+    print(response.content)
+
+
+for name, status in statuses.items():
+    response = client.set_status(name = name,**status)
     print(response.content)
