@@ -1,12 +1,13 @@
 import SimpleStatusAPI as api
 from models import Colors
+from time import sleep
 
 configs = {
-    1:{
-      "name":"component one"  ,
-      "parent_key":0,
-        "details":"details for one",
-        "timeout_min":120,
+    1: {
+        "name": "component one",
+        "parent_key": 0,
+        "details": "details for one",
+        "timeout_min": 120,
         "timeout_color": Colors.red
     },
     2: {
@@ -38,15 +39,21 @@ statuses = {
     }
 }
 
-client = api.APIClient("http://127.0.0.1:8001/api")
+client = api.APIClient("http://127.0.0.1:80/api")
 
 for key, config in configs.items():
     response = client.set_config_base(key, **config)
     print(response.content)
 
+
+sleep(1)
+
 for key, status in statuses_base.items():
     response = client.set_status_base(key, **status)
     print(response.content)
+
+
+sleep(1)
 
 for _, config in configs.items():
     try:
@@ -57,6 +64,8 @@ for _, config in configs.items():
     print(response.content)
 
 
+sleep(1)
+
 for name, status in statuses.items():
-    response = client.set_status(name = name,**status)
+    response = client.set_status(name=name, **status)
     print(response.content)
