@@ -1,0 +1,21 @@
+anyio==3.3.0
+attrs==21.2.0
+certifi==2021.5.30
+charset-normalizer==2.0.4
+fast-api-client @ file:///D:/Users/ben/Documents/telework/SimpleStatusClient/fast_api_client-0.1.0-py3-none-any.whl
+fastapi==0.68.1
+h11==0.12.0
+httpcore==0.13.6
+httpx==0.18.2
+idna==3.2
+multidict==5.1.0
+pydantic==1.8.2
+python-dateutil==2.8.2
+requests==2.26.0
+rfc3986==1.5.0
+six==1.16.0
+sniffio==1.2.0
+starlette==0.14.2
+typing-extensions==3.10.0.0
+urllib3==1.26.6
+yarl==1.6.3
