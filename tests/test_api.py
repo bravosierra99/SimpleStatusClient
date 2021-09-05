@@ -1,4 +1,4 @@
-import SimpleStatusAPI as api
+import SimpleStatusClient as api
 from models import Colors
 from time import sleep
 
