@@ -82,7 +82,7 @@ class APIClient():
                         component_key: int,
                         color: Colors,
                         message: str,
-                        date: datetime = datetime.now(),
+                        date: datetime = False,
                         ):
         """
         Base methods have full capability, but there may be an easier implementation for you to use.
@@ -93,6 +93,8 @@ class APIClient():
         :param date: the date of the status, defaults to now
         :return:
         """
+        if not date:
+            date = datetime.now()
         status = StatusIn(color=color, date=date, message=message)
         url = self.url / "components" / str(component_key) / "status"
         response = self.send_it(status, url)
