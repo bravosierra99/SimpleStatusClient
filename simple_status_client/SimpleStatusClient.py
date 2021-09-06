@@ -1,6 +1,7 @@
 import hashlib
 import json
 from datetime import datetime
+import logging
 
 import requests
 import yarl
@@ -8,13 +9,21 @@ import yarl
 from simple_status_client.models import ConfigIn, StatusIn
 from simple_status_client import Colors
 
+logger = logging.getLogger(__name__)
+
 
 class APIClient():
 
     def __init__(self, url):
+        logging.info(f"Instantiating Client for {url}")
         self.url = yarl.URL(url)
+        logging.debug("sending ping")
         response = requests.get(url=self.url / "ping")
-        assert b"pong" in response.content
+        try:
+            assert b"pong" in response.content
+        except AssertionError as e:
+            logging.error("Failed to ping the server.  This generally means that your server is not accessible from here, please verify that you can reach ")
+            raise e
 
     def set_config_base(self,
                         component_key: int,
@@ -38,9 +47,12 @@ class APIClient():
         color of your status
         :return:
         """
+        logging.info(f"set_config_base being called")
+        logging.debug(f"creating a ConfigIn object name={name}, parent_key={parent_key}, details={details}, timeout_min={timeout_min}, timeout_color={timeout_color}")
         config = ConfigIn(name=name, parent_key=parent_key, details=details, timeout_min=timeout_min,
                           timeout_color=timeout_color)
         url = self.url / "components" / str(component_key) / "config"
+        logging.debug(f"sending to {url}")
         response = self.send_it(config, url)
         return response
 
@@ -62,12 +74,18 @@ class APIClient():
         :param parent_name: a key for your parent component, results in your
         :return:
         """
+
+        logging.info(f"set_config being called")
+        logging.debug(f"parent_name={parent_name}")
         if not parent_name:
             parent_id = 0
         else:
             parent_id = self.name_to_component_id(parent_name)
+        logging.debug(f"parent_id is calculated to be {parent_id}")
 
         component_id = self.name_to_component_id(name)
+        logging.debug(f"comporent_id is calculated to be {component_id}")
+
         return self.set_config_base(component_id, name, details, timeout_min, timeout_color, parent_id)
 
     @staticmethod
@@ -94,10 +112,16 @@ class APIClient():
         :param date: the date of the status, defaults to now
         :return:
         """
+        logging.info(f"set_status_base being called")
+        logging.debug(f"color={color} message={message} date={date}")
+
         if not date:
             date = datetime.now()
+        logging.debug(f"calculated date={date}")
+        logging.debug(f"creating StatusIn with the above")
         status = StatusIn(color=color, date=date, message=message)
         url = self.url / "components" / str(component_key) / "status"
+        logging.debug(f"sending to {url}")
         response = self.send_it(status, url)
         return response
 
@@ -121,6 +145,7 @@ class APIClient():
     @staticmethod
     def send_it(post_content, url):
         response = requests.post(url, json=json.loads(post_content.json()))
+        logging.info(f"status_code={response.status_code} content={response.content}")
         if response.status_code != 200:
             raise Exception(response.content)
         return response
