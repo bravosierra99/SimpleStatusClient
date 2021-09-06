@@ -30,5 +30,5 @@ Voila, you should be able to view your status on the dashboard.
 - Components are identified by ID, which is calculated by hashing the name (or by calling the base functions and providing it directly e.g. `APIClient.set_status_base`).  
   - *DUPLICATE NAMES OVERWRITE*.  
   - This is by design, if you want to update your configuration and or status you can do it without jumping through any hoops.  Simply send a new configuration or status.  That being said if you have code in multiple places using the same id... they will be stepping on each other
-- This library is provided as a convience, the REST API is full accessible and you can write your own interface if you would like.  
+- This library is provided as a convenience, the REST API is full accessible and you can write your own interface if you would like.  
   - I promise to keep this library up to date and working to the best of my ability.  Maybe I'll even write tests for it.

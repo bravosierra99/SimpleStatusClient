@@ -1,5 +1,5 @@
-import SimpleStatusClient as api
-from models import Colors
+from simple_status_client import Client
+from simple_status_client import Colors
 from time import sleep
 
 configs = {
@@ -39,7 +39,7 @@ statuses = {
     }
 }
 
-client = api.APIClient("http://127.0.0.1:80/api")
+client = Client("http://127.0.0.1:80/api")
 
 for key, config in configs.items():
     response = client.set_config_base(key, **config)

@@ -5,7 +5,8 @@ from datetime import datetime
 import requests
 import yarl
 
-from models import Colors, ConfigIn, StatusIn
+from simple_status_client.models import ConfigIn, StatusIn
+from simple_status_client import Colors
 
 
 class APIClient():
