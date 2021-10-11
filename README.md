@@ -10,7 +10,7 @@ Ensure you have pulled [SimpleStatusServer](https://github.com/bravosierra99/Sim
 - cd SimpleStatusClient
 - python -m pip install . \_(this should be the python environment in which your stasus needing code runs)
 - Within the code that you wish to send statuses do the following
-  - `from SimpleStatusClient import APIClient, Colors`
+  - `from simple_status_client import APIClient, Colors`
   - `client = APIClient("http://*server_ip*/api")` server_ip should be the ip address of your docker container
   - `client.setConfig()` -- _fill in params_
   - `client.setStatus()` -- _fill in params_
