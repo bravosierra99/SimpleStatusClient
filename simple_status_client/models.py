@@ -20,9 +20,9 @@ class ConfigIn(BaseModel):
     timeout_min: int
     timeout_color: Colors
 
+
     class Config:
         use_enum_values = True
-
 
 
 class ConfigStored(BaseModel):
@@ -33,6 +33,7 @@ class ConfigStored(BaseModel):
     timeout_min: int
     timeout_color: Colors
     subcomponents: dict = dict()
+
 
     class Config:
         use_enum_values = True
@@ -57,7 +58,7 @@ class ComponentStatusOut(BaseModel):
 
     class Config:
         allow_mutation : True
-        use_enum_values = True
+        use_enum_values : True
 ComponentStatusOut.update_forward_refs()
 # ComponentStatus.__pydantic_model__.update_forward_refs()
 # class ComponentStatusesOut(BaseModel):
@@ -69,6 +70,7 @@ class StatusIn(BaseModel):
     color: Colors
     date: datetime
     message: str
+
 
     class Config:
         use_enum_values = True
