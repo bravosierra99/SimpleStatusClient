@@ -142,6 +142,50 @@ class APIClient():
         """
         return self.set_status_base(self.name_to_component_id(name), color, message, date)
 
+
+    def clear_statuses_base(self, component_key) -> str:
+        """
+        clear the statuses from a specific component by component_key.  Will clear entire status history
+        :param component_key: the unique component id identifying which component to clear status history from
+        :return: str: from server
+        """
+        logging.info(f"clear_statuses being called on {component_key}")
+
+        url = self.url / "components" / str(component_key) / "status" / "clear"
+        logging.debug(f"sending to {url}")
+        response = self.send_it(url)
+        return response
+
+    def clear_statuses(self, name) -> str:
+        """
+        clear the statuses from a specific component by name.  Will clear entire status history
+        :param name:
+        :return:
+        """
+        logging.info(f"clear_statuses being called on {name}")
+        response = self.clear_statuses_base(self.name_to_component_id(name))
+        return response
+
+    def clear_all_statuses(self)-> str:
+        """
+        clear all statuses from every component
+        :return:
+        """
+        logging.info(f"clear_all_statuses being called")
+        url = self.url / "components" / "statuses" / "clear"
+        response = self.send_it(url)
+        return response
+
+    def clear_config_base(self, component_key) -> str:
+        return "not implemented, in general you shouldn't need to clear these.  You either overwrite them, ignore them, or if you want to restart the docker container to start fresh"
+
+
+    def clear_config(self, name) -> str:
+        return "not implemented, in general you shouldn't need to clear these.  You either overwrite them, ignore them, or if you want to restart the docker container to start fresh"
+
+    def clear_all_config(self) -> str:
+        return "not implemented, in general you shouldn't need to clear these.  You either overwrite them, ignore them, or if you want to restart the docker container to start fresh"
+
     @staticmethod
     def send_it(post_content, url):
         response = requests.post(url, json=json.loads(post_content.json()))
