@@ -25,5 +25,3 @@ jobs:
         uses: JRubics/poetry-publish@v1.9
         with:
           pypi_token: ${{ secrets.PYPI_TOKEN }}
-
-
