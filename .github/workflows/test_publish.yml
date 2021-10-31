@@ -26,5 +26,4 @@ jobs:
         with:
           pypi_token: ${{ secrets.PYPI_TOKEN }}
 
-          echo Add other actions to build,
-          echo test, and deploy your project.
+
