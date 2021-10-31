@@ -5,6 +5,7 @@ import logging
 
 import requests
 import yarl
+from requests import Response
 
 from simple_status_client.models import ConfigIn, StatusIn
 from simple_status_client import Colors
@@ -53,7 +54,7 @@ class APIClient():
                           timeout_color=timeout_color)
         url = self.url / "components" / str(component_key) / "config"
         logging.debug(f"sending to {url}")
-        response = self.send_it(config, url)
+        response = self.post_it(config, url)
         return response
 
     def set_config(self,
@@ -122,7 +123,7 @@ class APIClient():
         status = StatusIn(color=color, date=date, message=message)
         url = self.url / "components" / str(component_key) / "status"
         logging.debug(f"sending to {url}")
-        response = self.send_it(status, url)
+        response = self.post_it(status, url)
         return response
 
     def set_status(self,
@@ -143,7 +144,7 @@ class APIClient():
         return self.set_status_base(self.name_to_component_id(name), color, message, date)
 
 
-    def clear_statuses_base(self, component_key) -> str:
+    def clear_statuses_base(self, component_key) -> Response:
         """
         clear the statuses from a specific component by component_key.  Will clear entire status history
         :param component_key: the unique component id identifying which component to clear status history from
@@ -153,10 +154,10 @@ class APIClient():
 
         url = self.url / "components" / str(component_key) / "status" / "clear"
         logging.debug(f"sending to {url}")
-        response = self.send_it(url)
+        response = self.get_it(url)
         return response
 
-    def clear_statuses(self, name) -> str:
+    def clear_statuses(self, name) -> Response:
         """
         clear the statuses from a specific component by name.  Will clear entire status history
         :param name:
@@ -166,15 +167,15 @@ class APIClient():
         response = self.clear_statuses_base(self.name_to_component_id(name))
         return response
 
-    def clear_all_statuses(self)-> str:
+    def clear_all_statuses(self)-> Response:
         """
         clear all statuses from every component
         :return:
         """
         logging.info(f"clear_all_statuses being called")
         url = self.url / "components" / "statuses" / "clear"
-        response = self.send_it(url)
-        return response
+        response = self.get_it(url)
+        return  response
 
     def clear_config_base(self, component_key) -> str:
         return "not implemented, in general you shouldn't need to clear these.  You either overwrite them, ignore them, or if you want to restart the docker container to start fresh"
@@ -187,9 +188,24 @@ class APIClient():
         return "not implemented, in general you shouldn't need to clear these.  You either overwrite them, ignore them, or if you want to restart the docker container to start fresh"
 
     @staticmethod
-    def send_it(post_content, url):
-        response = requests.post(url, json=json.loads(post_content.json()))
+    def post_it(post_content, url):
+        response = APIClient.send_it("post",content=post_content,url=url)
+        return response
+
+    @staticmethod
+    def get_it(url):
+        response = APIClient.send_it("get",url=url)
+        return response
+
+    @staticmethod
+    def send_it(type: str,url,content:dict={} ):
+        if "post" in type.lower():
+            response = requests.post(url, json=json.loads(content.json()))
+        elif "get" in type.lower():
+            response = requests.get(url)
+
         logging.info(f"status_code={response.status_code} content={response.content}")
         if response.status_code != 200:
             raise Exception(response.content)
         return response
+
