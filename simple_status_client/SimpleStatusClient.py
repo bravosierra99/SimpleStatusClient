@@ -130,7 +130,7 @@ class APIClient():
                    name: str,
                    color: Colors,
                    message: str,
-                   date: datetime,
+                   date: datetime=False,
                    ):
         """
         Base methods have full capability, but there may be an easier implementation for you to use.
@@ -141,9 +141,6 @@ class APIClient():
         :param date: the date of the status, defaults to now
         :return:
         """
-        if not date:
-            date = datetime.now()
-
         return self.set_status_base(self.name_to_component_id(name), color, message, date)
 
 
